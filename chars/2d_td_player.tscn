@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dboexbvi8f127"]
+[gd_scene load_steps=27 format=3 uid="uid://dboexbvi8f127"]
 
 [ext_resource type="Script" path="res://Scripts/2DPlayerTD.gd" id="1_p4tqp"]
 [ext_resource type="Script" path="res://Scripts/CameraFollow.gd" id="2_evprn"]
@@ -88,8 +88,124 @@ animations = [{
 "speed": 1.0
 }]
 
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_cqu04"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_7nr0o"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_g32k6"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_0qdxb"]
+states/Attack/node = SubResource("AnimationNodeStateMachine_cqu04")
+states/Attack/position = Vector2(617, 28)
+states/Hit/node = SubResource("AnimationNodeStateMachine_7nr0o")
+states/Hit/position = Vector2(610, 197)
+states/Walk/node = SubResource("AnimationNodeStateMachine_g32k6")
+states/Walk/position = Vector2(347, 100)
+graph_offset = Vector2(7, -25)
+
+[sub_resource type="Animation" id="Animation_62mmc"]
+resource_name = "Idle"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SprAnimation:sprite_frames")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SprAnimation:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("SprAnimation:animation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_y2g5m"]
+resource_name = "downLeft"
+
+[sub_resource type="Animation" id="Animation_sg518"]
+resource_name = "downRight"
+
+[sub_resource type="Animation" id="Animation_ewtjv"]
+resource_name = "down"
+
+[sub_resource type="Animation" id="Animation_ffuo8"]
+resource_name = "left"
+
+[sub_resource type="Animation" id="Animation_7dmeu"]
+resource_name = "right"
+
+[sub_resource type="Animation" id="Animation_76m63"]
+resource_name = "upRight"
+
+[sub_resource type="Animation" id="Animation_iqm6x"]
+resource_name = "upLeft"
+
+[sub_resource type="Animation" id="Animation_3lieq"]
+resource_name = "up"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SprPlayer:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("SprPlayer:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bhn5n"]
+_data = {
+"Idle": SubResource("Animation_62mmc"),
+"down": SubResource("Animation_ewtjv"),
+"downLeft": SubResource("Animation_y2g5m"),
+"downRight": SubResource("Animation_sg518"),
+"left": SubResource("Animation_ffuo8"),
+"right": SubResource("Animation_7dmeu"),
+"up": SubResource("Animation_3lieq"),
+"upLeft": SubResource("Animation_iqm6x"),
+"upRight": SubResource("Animation_76m63")
+}
+
 [node name="2D_TD_Player" type="CharacterBody2D"]
 script = ExtResource("1_p4tqp")
+speed = null
 zoom = Vector2(2, 2)
 metadata/_edit_group_ = true
 
@@ -105,10 +221,18 @@ shape = SubResource("CircleShape2D_o0csl")
 [node name="SprAnimation" type="AnimatedSprite2D" parent="."]
 material = SubResource("CanvasItemMaterial_b4c1c")
 sprite_frames = SubResource("SpriteFrames_oke7q")
-animation = &"down_r"
+animation = &"idle"
 
 [node name="SprPlayer" type="Sprite2D" parent="."]
 texture = ExtResource("3_7vd8b")
 hframes = 3
 vframes = 3
 frame = 4
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_0qdxb")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_bhn5n")
+}

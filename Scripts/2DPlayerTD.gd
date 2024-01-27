@@ -14,4 +14,4 @@ func _physics_process(delta):
 	move_and_slide()
 func Walk():
 	walk = Input.get_vector("left","right","forward","back").normalized()
-	
+	new_animation
