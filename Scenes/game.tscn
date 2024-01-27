@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgbyesd4mcgwu"]
+[gd_scene load_steps=5 format=3 uid="uid://dgbyesd4mcgwu"]
 
 [ext_resource type="PackedScene" uid="uid://djxvfnpn2688g" path="res://Scenes/game_manager.tscn" id="1_1iph4"]
 [ext_resource type="PackedScene" uid="uid://dboexbvi8f127" path="res://chars/2d_td_player.tscn" id="2_7biwl"]
 [ext_resource type="PackedScene" uid="uid://b8l8o1h4bc8yp" path="res://Scenes/level.tscn" id="2_q8p25"]
+[ext_resource type="PackedScene" uid="uid://0phyn1ps6df7" path="res://chars/2d_td_ai.tscn" id="3_xjnmx"]
 
 [node name="Game" type="Node"]
 
@@ -10,5 +11,9 @@
 
 [node name="Level" parent="." instance=ExtResource("2_q8p25")]
 
+[node name="2d_td_ai" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_xjnmx")]
+target = NodePath("../2D_TD_Player")
+
 [node name="2D_TD_Player" parent="." instance=ExtResource("2_7biwl")]
+position = Vector2(137, -4)
 speed = 5000.0
