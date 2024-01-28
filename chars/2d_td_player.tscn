@@ -220,7 +220,7 @@ states/WalkBS/position = Vector2(554, 100)
 transitions = ["Start", "WalkBS", SubResource("AnimationNodeStateMachineTransition_e8w8n")]
 
 [node name="2D_TD_Player" type="CharacterBody2D"]
-collision_mask = 26
+collision_mask = 30
 platform_floor_layers = 4294967291
 platform_wall_layers = 4
 script = ExtResource("1_nxxd0")
@@ -235,6 +235,7 @@ collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LevitationArea"]
 shape = SubResource("CircleShape2D_t8jby")
+debug_color = Color(0.870588, 0, 0.843137, 0.419608)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position_smoothing_speed = 10.0
@@ -267,4 +268,5 @@ tree_root = SubResource("AnimationNodeStateMachine_cr1v4")
 anim_player = NodePath("../AnimationPlayer")
 parameters/WalkBS/blend_position = Vector2(0, 0)
 
-[connection signal="body_entered" from="LevitationArea" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="LevitationArea" to="." method="_on_levitation_area_body_entered"]
+[connection signal="body_exited" from="LevitationArea" to="." method="_on_levitation_area_body_exited"]

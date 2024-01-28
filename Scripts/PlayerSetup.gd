@@ -8,8 +8,7 @@ extends CharacterBody2D
 @onready var ctrlr := $PlayerCtrlr
 func _ready():
 	cam.zoom = zoom
-func _physics_process(delta):
-	move_and_slide()
+func _input(event):
 	if Input.is_action_just_pressed("grab"):
 		if aiTarget != null:
 			aiTarget.state = 1
@@ -18,11 +17,18 @@ func _physics_process(delta):
 			aiTarget.state = 2
 			aiTarget.launchDir = velocity
 			aiTarget = null
-func _on_area_2d_body_entered(body):
+func _physics_process(delta):
+	$LevitationArea.bodies
+	move_and_slide()
+func _on_levitation_area_body_entered(body):
 	if body.is_in_group("mob"):
 		if aiTarget ==null:
 			aiTarget = body
-#func _on_area_2d_body_exited(body):
-	#if body.is_in_group("mob"):
-		#if aiTarget !=null:
-			#aiTarget = null
+			print(aiTarget)
+func _on_levitation_area_body_exited(body):
+	if body == aiTarget :
+		if aiTarget !=null:
+			aiTarget = null
+			print(aiTarget)
+
+
