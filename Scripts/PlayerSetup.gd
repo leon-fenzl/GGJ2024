@@ -9,19 +9,20 @@ extends CharacterBody2D
 func _ready():
 	cam.zoom = zoom
 func _physics_process(delta):
-	if Input.is_action_pressed("grab"):
+	move_and_slide()
+	if Input.is_action_just_pressed("grab"):
 		if aiTarget != null:
-			aiTarget.onGrab = true
-			aiTarget.onLaunch = false
-			aiTarget.holdPos =lerp(aiTarget.holdPos,Vector2(position.x, position.y-20),10*delta)
+			aiTarget.state = 1
 	if Input.is_action_just_released("grab"):
 		if aiTarget != null:
-			aiTarget.onGrab = false
-			aiTarget.onLaunch = true
+			aiTarget.state = 2
 			aiTarget.launchDir = velocity
 			aiTarget = null
-	move_and_slide()
 func _on_area_2d_body_entered(body):
 	if body.is_in_group("mob"):
 		if aiTarget ==null:
 			aiTarget = body
+#func _on_area_2d_body_exited(body):
+	#if body.is_in_group("mob"):
+		#if aiTarget !=null:
+			#aiTarget = null

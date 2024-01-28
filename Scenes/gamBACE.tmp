@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://dgbyesd4mcgwu"]
+
+[ext_resource type="PackedScene" uid="uid://djxvfnpn2688g" path="res://Scenes/game_manager.tscn" id="1_1iph4"]
+[ext_resource type="PackedScene" uid="uid://dboexbvi8f127" path="res://chars/2d_td_player.tscn" id="2_7biwl"]
+[ext_resource type="PackedScene" uid="uid://b8l8o1h4bc8yp" path="res://Scenes/level.tscn" id="2_q8p25"]
+[ext_resource type="PackedScene" uid="uid://ds4h6scd60bj7" path="res://spawner.tscn" id="5_ucbbi"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_ge766"]
+vertices = PackedVector2Array(614, 358, -614, 358, -614, -358, 614, -358)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(-624, -368, 624, -368, 624, 368, -624, 368)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+
+[node name="Game" type="Node"]
+
+[node name="GameManager" parent="." instance=ExtResource("1_1iph4")]
+
+[node name="Level" parent="." instance=ExtResource("2_q8p25")]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_ge766")
+metadata/_edit_group_ = true
+
+[node name="2D_TD_Player" parent="NavigationRegion2D" instance=ExtResource("2_7biwl")]
+position = Vector2(232, 48)
+platform_on_leave = 2
+platform_floor_layers = 4294967290
+speed = 5000.0
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+polygon = PackedVector2Array(0, 360, -616, 360, -616, -360, 616, -360, 616, 360, 0, 360, 0, 384, 640, 384, 640, -384, -640, -384, -640, 384, 0, 384)
+
+[node name="Spawner" parent="." node_paths=PackedStringArray("player") instance=ExtResource("5_ucbbi")]
+position = Vector2(448, 0)
+range = 50.0
+time = 2.0
+player = NodePath("../NavigationRegion2D/2D_TD_Player")
+
+[node name="Spawner2" parent="." node_paths=PackedStringArray("player") instance=ExtResource("5_ucbbi")]
+position = Vector2(-480, 0)
+range = 50.0
+time = 2.0
+player = NodePath("../NavigationRegion2D/2D_TD_Player")

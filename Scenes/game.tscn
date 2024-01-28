@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dgbyesd4mcgwu"]
+[gd_scene load_steps=7 format=3 uid="uid://dgbyesd4mcgwu"]
 
 [ext_resource type="PackedScene" uid="uid://djxvfnpn2688g" path="res://Scenes/game_manager.tscn" id="1_1iph4"]
 [ext_resource type="PackedScene" uid="uid://dboexbvi8f127" path="res://chars/2d_td_player.tscn" id="2_7biwl"]
 [ext_resource type="PackedScene" uid="uid://b8l8o1h4bc8yp" path="res://Scenes/level.tscn" id="2_q8p25"]
-[ext_resource type="PackedScene" uid="uid://0phyn1ps6df7" path="res://chars/2d_td_ai.tscn" id="3_xjnmx"]
+[ext_resource type="PackedScene" uid="uid://ds4h6scd60bj7" path="res://Scenes/spawner.tscn" id="3_n2vky"]
+[ext_resource type="Script" path="res://Scripts/RebakeNavmesh.gd" id="3_v75vc"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_ge766"]
 vertices = PackedVector2Array(614, 358, -614, 358, -614, -358, 614, -358)
@@ -19,21 +20,60 @@ source_geometry_group_name = &"navigation_polygon_source_group"
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 navigation_polygon = SubResource("NavigationPolygon_ge766")
+script = ExtResource("3_v75vc")
 metadata/_edit_group_ = true
 
-[node name="2d_td_ai" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_xjnmx")]
-platform_on_leave = 2
-platform_wall_layers = 1
-target = NodePath("../2D_TD_Player")
+[node name="Timer" type="Timer" parent="NavigationRegion2D"]
+wait_time = 0.25
+autostart = true
+
+[node name="Spawner" parent="NavigationRegion2D" node_paths=PackedStringArray("player") instance=ExtResource("3_n2vky")]
+player = NodePath("../../2D_TD_Player")
 
 [node name="2D_TD_Player" parent="." instance=ExtResource("2_7biwl")]
-position = Vector2(32, 32)
+position = Vector2(232, 48)
 platform_on_leave = 2
 platform_floor_layers = 4294967290
-speed = 5000.0
+speed = 10000.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 collision_layer = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
 polygon = PackedVector2Array(0, 360, -616, 360, -616, -360, 616, -360, 616, 360, 0, 360, 0, 384, 640, 384, 640, -384, -640, -384, -640, 384, 0, 384)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="PauseMenu" type="Control" parent="Control"]
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="ColorRect" type="ColorRect" parent="Control/PauseMenu"]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.00392157, 0.00392157, 0.00392157, 0.34902)
+
+[node name="HUD" type="Control" parent="Control"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LifeBar" type="ProgressBar" parent="Control/HUD"]
+modulate = Color(1, 0, 0, 1)
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 0
+offset_left = 640.0
+offset_top = 680.0
+offset_right = 840.0
+offset_bottom = 707.0
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+value = 100.0
+
+[connection signal="bake_finished" from="NavigationRegion2D" to="NavigationRegion2D" method="_on_bake_finished"]
+[connection signal="timeout" from="NavigationRegion2D/Timer" to="NavigationRegion2D" method="_on_timer_timeout"]

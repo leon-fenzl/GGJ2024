@@ -1,18 +1,36 @@
-[gd_scene load_steps=17 format=3 uid="uid://0phyn1ps6df7"]
+[gd_scene load_steps=18 format=3 uid="uid://0phyn1ps6df7"]
 
-[ext_resource type="Script" path="res://Scripts/AI_Setup.gd" id="1_1egua"]
-[ext_resource type="Texture2D" uid="uid://dt4qpg4ybqjns" path="res://Art/SideScroller_Tilemap.png" id="1_b5lmo"]
-[ext_resource type="Script" path="res://Scripts/AIController.gd" id="2_3ppp5"]
+[ext_resource type="Script" path="res://Scripts/AI_Setup.gd" id="1_qlha7"]
+[ext_resource type="Script" path="res://Scripts/AIController.gd" id="2_0fuo7"]
+[ext_resource type="Texture2D" uid="uid://dt4qpg4ybqjns" path="res://Art/SideScroller_Tilemap.png" id="3_uflvc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_srwux"]
+radius = 24.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o0csl"]
 radius = 13.0384
+
+[sub_resource type="Animation" id="Animation_y62oy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../SprAI:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
 
 [sub_resource type="Animation" id="Animation_0425w"]
 resource_name = "idle"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../SprPlayer:frame")
+tracks/0/path = NodePath("../SprAI:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -28,7 +46,7 @@ length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("../SprPlayer:frame")
+tracks/0/path = NodePath("../SprAI:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -36,21 +54,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 3, 4, 5, 6, 7]
-}
-
-[sub_resource type="Animation" id="Animation_y62oy"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../SprPlayer:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gbhyh"]
@@ -100,21 +103,32 @@ transitions = ["Start", "Walk", SubResource("AnimationNodeStateMachineTransition
 [node name="2d_td_ai" type="CharacterBody2D" groups=["mob"]]
 collision_layer = 4
 collision_mask = 30
+platform_on_leave = 2
 platform_floor_layers = 4294967290
 platform_wall_layers = 5
-script = ExtResource("1_1egua")
+script = ExtResource("1_qlha7")
+speed = 5000.0
 metadata/_edit_group_ = true
 
 [node name="AICtrlr" type="Node" parent="."]
-script = ExtResource("2_3ppp5")
+script = ExtResource("2_0fuo7")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+radius = 100.0
+avoidance_layers = 4
+avoidance_mask = 5
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_srwux")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_o0csl")
 
-[node name="SprPlayer" type="Sprite2D" parent="."]
-texture = ExtResource("1_b5lmo")
+[node name="SprAI" type="Sprite2D" parent="."]
+texture = ExtResource("3_uflvc")
 hframes = 4
 vframes = 5
 
@@ -134,5 +148,6 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/Walk/blend_position = Vector2(0, 0)
 
 [node name="Timer" type="Timer" parent="."]
+autostart = true
 
 [connection signal="timeout" from="Timer" to="AICtrlr" method="_on_timer_timeout"]
