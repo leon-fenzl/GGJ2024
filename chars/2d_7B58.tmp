@@ -1,13 +1,14 @@
-[gd_scene load_steps=30 format=3 uid="uid://dboexbvi8f127"]
+[gd_scene load_steps=31 format=3 uid="uid://dboexbvi8f127"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerSetup.gd" id="1_nxxd0"]
 [ext_resource type="Script" path="res://Scripts/CameraFollow.gd" id="2_evprn"]
 [ext_resource type="Script" path="res://Scripts/PlayerCtrlr.gd" id="2_nlt6y"]
+[ext_resource type="Script" path="res://Scripts/LaunchSystem.gd" id="3_ojptg"]
 [ext_resource type="Texture2D" uid="uid://cohl7bsnbgt16" path="res://Art/PlayerTiles.png" id="4_dw633"]
 [ext_resource type="Texture2D" uid="uid://43uyyru87oc" path="res://Art/BaseSpritesheet.png" id="5_xrhxb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t8jby"]
-radius = 20.0
+radius = 15.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o0csl"]
 
@@ -220,9 +221,8 @@ states/WalkBS/position = Vector2(554, 100)
 transitions = ["Start", "WalkBS", SubResource("AnimationNodeStateMachineTransition_e8w8n")]
 
 [node name="2D_TD_Player" type="CharacterBody2D"]
-collision_mask = 26
-platform_floor_layers = 4294967291
-platform_wall_layers = 4
+collision_mask = 30
+platform_on_leave = 2
 script = ExtResource("1_nxxd0")
 zoom = Vector2(2, 2)
 metadata/_edit_group_ = true
@@ -231,7 +231,8 @@ metadata/_edit_group_ = true
 script = ExtResource("2_nlt6y")
 
 [node name="Area2D" type="Area2D" parent="."]
-collision_mask = 4
+collision_mask = 0
+script = ExtResource("3_ojptg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_t8jby")

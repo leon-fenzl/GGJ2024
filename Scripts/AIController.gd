@@ -7,16 +7,20 @@ extends Node
 @onready var distanceToPlayer:=Vector2.ZERO
 
 @onready var col : KinematicCollision3D
-@onready var agent := $"../NavigationAgent2D"
+@onready var agent := $"../NavigationAgent2D" as NavigationAgent2D
 @onready var aTree := $"../AnimationTree"
 func _physics_process(delta):
-	pointInPath = agent.get_next_path_position()
-	CalculateDistance()
-	if distanceToPlayer.length() > 10.0:
-		direction = (pointInPath - ai.global_position).normalized()
-		ai.velocity = lerp(ai.velocity,direction * ai.speed*delta,10*delta)
-	else:
-		ai.velocity = lerp(ai.velocity, Vector2.ZERO, 10*delta)
+	if ai.onGrab == false && ai.onLaunch == false:
+		pointInPath = agent.get_next_path_position()
+		CalculateDistance()
+		if distanceToPlayer.length() > 10.0:
+			direction = (pointInPath - ai.global_position).normalized()
+			ai.velocity = lerp(ai.velocity,direction * ai.speed*delta,10*delta)
+		else:
+			ai.velocity = lerp(ai.velocity, Vector2.ZERO, 10*delta)
+		if ai.velocity == Vector2.ZERO:
+			pass
+		else:aTree.set("parameters/Walk/blend_position",direction)
 	#GetCollisions()
 func CalculateDistance():
 	distanceToPlayer = agent.target_position - ai.global_position
